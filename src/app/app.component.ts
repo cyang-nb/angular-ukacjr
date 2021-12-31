@@ -111,6 +111,7 @@ export class AppComponent implements OnInit {
 
   point7 = this.LLA2XYZ(38.4161, 'S', 63.6167, 'W', 123);
   displayPts;
+  livePts;
 
   static subjectCenter: number[] = [150, 150];
   static scale;
@@ -123,6 +124,7 @@ export class AppComponent implements OnInit {
   ctx3: CanvasRenderingContext2D;
   ctx4: CanvasRenderingContext2D;
 
+  pts: canvasCircle[];
   pt1: canvasCircle;
   pt2: canvasCircle;
   pt3: canvasCircle;
@@ -149,6 +151,7 @@ export class AppComponent implements OnInit {
     const sgPt = this.vecOps.arr2Vector(this.point4);
 
     console.log(this.makeDisplayVector(this.point1, this.point4));
+
     this.displayPts = [
       this.vecOps.makeDisplayVector(this.vecOps.arr2Vector(this.point1), sgPt),
       this.vecOps.makeDisplayVector(this.vecOps.arr2Vector(this.point2), sgPt),
@@ -157,6 +160,15 @@ export class AppComponent implements OnInit {
       // this.makeDisplayVector(this.point2, this.point4),
       // this.makeDisplayVector(this.point3, this.point4)
     ];
+
+    for (let i = 0; i < this.displayPts.length; ++i)
+      this.displayPts.push(
+        new vector3d(
+          this.displayPts[i].x,
+          this.displayPts[i].y,
+          this.displayPts[i].z
+        )
+      );
 
     // console.log(this.dot(this.displayPts[0], this.normalize(this.point4)));
     // console.log(this.dot(this.displayPts[1], this.normalize(this.point4)));
@@ -179,9 +191,19 @@ export class AppComponent implements OnInit {
     const tmp = this.vecOps.arr2Vector([0, 0, 0]);
     this.pt4 = new canvasCircle(this.CC(), tmp, 2);
 
-    this.pt1 = new canvasCircle(this.CC(), this.displayPts[0], 2);
-    this.pt2 = new canvasCircle(this.CC(), this.displayPts[1], 2, 'blue');
-    this.pt3 = new canvasCircle(this.CC(), this.displayPts[2], 2, 'green');
+    this.pts = [
+      new canvasCircle(this.CC(), this.displayPts[0], 2),
+      new canvasCircle(this.CC(), this.displayPts[1], 2, 'blue'),
+      new canvasCircle(this.CC(), this.displayPts[2], 2, 'green'),
+    ];
+  }
+
+  updatePoints(event) {
+    for (let i = 0; i < this.livePts.length; ++i) {
+      this.livePts[i].x *= this.displayPts[i].x * event.value;
+      this.livePts[i].y *= this.displayPts[i].y * event.value;
+      this.livePts[i].z *= this.displayPts[i].z * event.value;
+    }
   }
 
   add(start, offset) {
