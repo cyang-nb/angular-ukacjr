@@ -165,8 +165,9 @@ export class AppComponent implements OnInit {
       // this.makeDisplayVector(this.point3, this.point4)
     ];
 
+    this.livePts = [];
     for (let i = 0; i < this.displayPts.length; ++i)
-      this.displayPts.push(
+      this.livePts.push(
         new vector3d(
           this.displayPts[i].x,
           this.displayPts[i].y,
@@ -203,6 +204,7 @@ export class AppComponent implements OnInit {
   }
 
   updatePoints(event) {
+    console.log(event.value);
     this.CC().clearRect(
       0,
       0,
@@ -213,9 +215,11 @@ export class AppComponent implements OnInit {
     this.pt4.draw();
 
     for (let i = 0; i < this.livePts.length; ++i) {
-      this.livePts[i].x *= this.displayPts[i].x * event.value;
-      this.livePts[i].y *= this.displayPts[i].y * event.value;
-      this.livePts[i].z *= this.displayPts[i].z * event.value;
+      this.livePts[i] = new vector3d(
+        this.displayPts[i].x * event.value,
+        this.displayPts[i].y * event.value,
+        this.displayPts[i].z * event.value
+      );
       this.pts[i].setXY(this.livePts[i]);
       this.pts[i].draw();
     }
