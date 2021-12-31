@@ -204,7 +204,7 @@ export class AppComponent implements OnInit {
   }
 
   updatePoints(event) {
-    console.log(event.value);
+
     this.CC().clearRect(
       0,
       0,
