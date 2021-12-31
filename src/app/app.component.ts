@@ -77,14 +77,18 @@ export class canvasCircle {
   radius: number;
 
   constructor(canvas, input: vector3d, radius: number, color?) {
-    this.x = AppComponent.subjectCenter[0] - input.x;
-    this.y = AppComponent.subjectCenter[1] + input.y;
+    this.setXY(input);
     this.ctx = canvas;
     this.radius = radius;
 
     if (color != undefined) this.color = color;
 
     this.draw();
+  }
+
+  setXY(input: vector3d) {
+    this.x = AppComponent.subjectCenter[0] - input.x;
+    this.y = AppComponent.subjectCenter[1] + input.y;
   }
 
   draw() {
@@ -199,10 +203,21 @@ export class AppComponent implements OnInit {
   }
 
   updatePoints(event) {
+    this.CC().clearRect(
+      0,
+      0,
+      AppComponent.subjectCenter[0] * 2,
+      AppComponent.subjectCenter[1] * 2
+    );
+
+    this.pt4.draw();
+
     for (let i = 0; i < this.livePts.length; ++i) {
       this.livePts[i].x *= this.displayPts[i].x * event.value;
       this.livePts[i].y *= this.displayPts[i].y * event.value;
       this.livePts[i].z *= this.displayPts[i].z * event.value;
+      this.pts[i].setXY(this.livePts[i]);
+      this.pts[i].draw();
     }
   }
 
